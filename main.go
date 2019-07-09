@@ -31,6 +31,7 @@ func main() {
 	flag.Parse() // フラグを解釈
 	r := newRoom()
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
+  http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.Handle("/room", r)
 	// チャットルームを開始
 	go r.run()
