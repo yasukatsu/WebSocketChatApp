@@ -35,12 +35,12 @@ func main() {
 	var addr = flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse() // フラグを解釈
 	// Gomniauthのセットアップ
-	gomniauth.SetSecurityKey("セキュリティキー") // 自分で決めた文字列を入力
+	gomniauth.SetSecurityKey("11697186") // 自分で決めた文字列を入力
 	gomniauth.WithProviders(
 		// 第一引数と第二引数は認証プロバイダーで取得したものに置き換える
-		facebook.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/facebook"),
-		github.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/github"),
-		google.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/google"),
+		facebook.New("608867821605-ij33ecceoj82q004u78kocl3l9imhgjv.apps.googleusercontent.com", "urFwKYgLEr8aLy5YwEj2MQql", "http://localhost:8080/auth/callback/facebook"),
+		github.New("608867821605-ij33ecceoj82q004u78kocl3l9imhgjv.apps.googleusercontent.com", "urFwKYgLEr8aLy5YwEj2MQql", "http://localhost:8080/auth/callback/github"),
+		google.New("608867821605-ij33ecceoj82q004u78kocl3l9imhgjv.apps.googleusercontent.com", "urFwKYgLEr8aLy5YwEj2MQql", "http://localhost:8080/auth/callback/google"),
 	)
 	r := newRoom()
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
