@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/stretchr/objx"
+
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/facebook"
 	"github.com/stretchr/gomniauth/providers/github"
@@ -28,19 +30,25 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			template.Must(template.ParseFiles(filepath.Join("templates",
 				t.filename)))
 	})
-	t.templ.Execute(w, r)
+	data := map[string]interface{}{
+		"Host": r.Host,
+	}
+	if authCookie, err := r.Cookie("auth"); err == nil {
+		data["UserData"] = objx.MustFromBase64(authCookie.Value)
+	}
+	t.templ.Execute(w, data)
 }
 
 func main() {
 	var addr = flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse() // フラグを解釈
 	// Gomniauthのセットアップ
-	gomniauth.SetSecurityKey("セキュリティキー") // 自分で決めた文字列を入力
+	gomniauth.SetSecurityKey("?") // 自分で決めた文字列を入力
 	gomniauth.WithProviders(
 		// 第一引数と第二引数は認証プロバイダーで取得したものに置き換える
-		facebook.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/facebook"),
-		github.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/github"),
-		google.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/google"),
+		facebook.New("", "", "http://localhost:8080/auth/callback/facebook"),
+		github.New("", "", "http://localhost:8080/auth/callback/github"),
+		google.New("", "", "http://localhost:8080/auth/callback/google"),
 	)
 	r := newRoom()
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
