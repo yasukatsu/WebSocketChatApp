@@ -43,7 +43,7 @@ func main() {
 	var addr = flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse() // フラグを解釈
 	// Gomniauthのセットアップ
-	gomniauth.SetSecurityKey("?") // 自分で決めた文字列を入力
+	gomniauth.SetSecurityKey("0maehadare?") // 自分で決めた文字列を入力
 	gomniauth.WithProviders(
 		// 第一引数と第二引数は認証プロバイダーで取得したものに置き換える
 		facebook.New("", "", "http://localhost:8080/auth/callback/facebook"),
