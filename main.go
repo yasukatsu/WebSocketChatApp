@@ -65,6 +65,7 @@ func main() {
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
 	http.Handle("/room", r)
+	http.Handle("/upload", &templateHandler{filename: "upload.html"})
 	// チャットルームを開始
 	go r.run()
 	// Webサーバーを起動
