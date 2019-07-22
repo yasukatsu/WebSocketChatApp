@@ -55,6 +55,7 @@ func main() {
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.Handle("/room", r)
 	http.Handle("/upload", &templateHandler{filename: "upload.html"})
+	http.Handle("/avatars/", http.StripPrefix("/avatars/", http.FileServer(http.Dir("./avatars"))))
 
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
