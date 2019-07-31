@@ -57,7 +57,7 @@ type FileSystemAvatar struct{}
 var UseFileSystemAvatar FileSystemAvatar
 
 // GetAvatarURL ...
-func (emp FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
+func (emp FileSystemAvatar) GetAvatarURL(CnatUser) (string, error) {
 	if userid, ok := c.userData["userid"]; ok {
 		if useridStr, ok := userid.(string); ok {
 			if files, err := ioutil.ReadDir("avatars"); err == nil {
