@@ -16,6 +16,9 @@ import (
 	"github.com/stretchr/gomniauth/providers/google"
 )
 
+// 現在アクティブなAvatarの実装
+var avatars Avatar = UseFileSystemAvatar
+
 // templは１つのテンプレートを表します
 type templateHandler struct {
 	once     sync.Once
