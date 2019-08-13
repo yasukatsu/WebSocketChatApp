@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/objx"
 )
 
-// CnatUser ...
-type CnatUser interface {
+// ChatUser ...
+type ChatUser interface {
 	UniqueID() string
 	AvatarURL() string
 }
@@ -32,7 +32,7 @@ type authHandler struct {
 }
 
 func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if cookie, err := r.Cookie("auth"); err == http.ErrNoCookie || cookie.Value == " " {
+	if cookie, err := r.Cookie("auth"); err == http.ErrNoCookie || cookie.Value == "" {
 		// 未認証
 		w.Header().Set("Location", "/login")
 		w.WriteHeader(http.StatusTemporaryRedirect)

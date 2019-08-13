@@ -15,14 +15,27 @@ var ErrNoAvatarURL = errors.New("chat: アバターのURLを取得できませ�
 type Avatar interface {
 	// GetAvatarURLは指定されたクライアントのアバターのURLを返す
 	// 問題が発生した場合にはエラーを、特に、URLを取得できなかった場合にはErrNoAvatarURLを返す
-	GetAvatarURL(c *client) (string, error)
+	GetAvatarURL(ChatUser) (string, error)
+}
+
+// TryAvatars ...
+type TryAvatars []Avatar
+
+// GetAvatarURL ...
+func (a TryAvatars) GetAvatarURL(u ChatUser) (string, error) {
+	for _, avatar := range a {
+		if url, err := avatar.GetAvatarURL(u); err == nil {
+			return url, nil
+		}
+	}
+	return "", ErrNoAvatarURL
 }
 
 // AuthAvatar ...
 type AuthAvatar struct{}
 
-// UserAuthAvatar ...
-var UserAuthAvatar AuthAvatar
+// UseAuthAvatar ...
+var UseAuthAvatar AuthAvatar
 
 // GetAvatarURL ...
 func (emp AuthAvatar) GetAvatarURL(u ChatUser) (string, error) {
@@ -36,11 +49,11 @@ func (emp AuthAvatar) GetAvatarURL(u ChatUser) (string, error) {
 // GravatarAvatar ...
 type GravatarAvatar struct{}
 
-// UseGravar ...
-var UseGravar GravatarAvatar
+// UseGravatar ...
+var UseGravatar GravatarAvatar
 
 // GetAvatarURL ...
-func (emp GravatarAvatar) GetAvatarURL(u CnatUser) (string, error) {
+func (emp GravatarAvatar) GetAvatarURL(u ChatUser) (string, error) {
 	return "//www.gravatar.com/avatar/" + u.UniqueID(), nil
 }
 
@@ -51,7 +64,7 @@ type FileSystemAvatar struct{}
 var UseFileSystemAvatar FileSystemAvatar
 
 // GetAvatarURL ...
-func (emp FileSystemAvatar) GetAvatarURL(u CnatUser) (string, error) {
+func (emp FileSystemAvatar) GetAvatarURL(u ChatUser) (string, error) {
 	if files, err := ioutil.ReadDir("avatars"); err == nil {
 		for _, file := range files {
 			if file.IsDir() {
